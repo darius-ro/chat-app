@@ -6,7 +6,8 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017"
 var express = require("express"),
     app = express(),
     compression = require("compression"),
-    cookies = require("cookie-parser");
+    cookies = require("cookie-parser"),
+    cors = require("cors");
 
 var mongoose = require("mongoose"), // Database
     joi = require("joi"); // Validation
@@ -20,9 +21,11 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log("Connected to MongoDB"))
     .catch(err => console.log(err, "Failed to connect to MongoDB"));
 
+app.use(cors({
+    origin: "*"
+}));
 app.use(express.json({ limit: "1kb" }));
 app.use(compression());
-app.use(cookies());
 app.use(require("./middleware/auth").auth); // Authentication handler
 app.use("/auth", require("./routes/auth")); // Add auth routes to express
 

@@ -15,7 +15,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "please dont leave it as default";
 function createToken(user) { // If needed to add other attributes, less to change
     if (!user._id) return;
     return jwt.sign({
-        id: user._id
+        _id: user._id
     }, JWT_SECRET, {
         expiresIn: "1d"
     });
@@ -23,7 +23,8 @@ function createToken(user) { // If needed to add other attributes, less to chang
 
 router.get("/", auth.loggedIn, (req, res) => { // Return valid response if logged in
     return res.status(200).json({
-        username: res.userData.username // Given by the auth loggedIn middleware
+        username: req.userData.username, // Given by the auth loggedIn middleware
+        _id: req.user
     })
 }) 
 
@@ -52,10 +53,10 @@ router.post("/login", auth.loggedOut, async (req, res) => { // Authenticate the 
         })
 
         const token = createToken(user)
-        res.cookie("auth", token);
         return res.status(200).json({
             error: false,
-            id: user._id
+            _id: user._id,
+            token,
         });
     } catch (err) {
         console.log(err);
@@ -99,10 +100,10 @@ router.post("/register", auth.loggedOut, async (req, res) => { // Create the use
             .save()
             .then((user) => {
                 const token = createToken(user);
-                res.cookie('auth', token);
                 return res.status(200).json({
                     error: false,
-                    id: user._id
+                    id: user._id,
+                    token,
                 })
             })
             .catch((err) => {
@@ -117,13 +118,6 @@ router.post("/register", auth.loggedOut, async (req, res) => { // Create the use
             error: "A unexpected error has occured."
         })
     }
-})
-
-router.get("/logout", (req, res) => {
-    res.clearCookie("auth");
-    res.status(200).json({
-        error: false,
-    });
 })
 
 module.exports = router;
