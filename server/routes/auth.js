@@ -40,11 +40,12 @@ router.post("/login", auth.loggedOut, async (req, res) => { // Authenticate the 
             return res.status(400).json({
                 error: error.message
             });
-
-        const user = await users.find({ email: value.email })
+        
+        const user = await users.findOne({ email: value.email })
         if (!user) return res.status(403).json({
             error: "Email or password was invalid."
         })
+        
         const valid = await bcrypt.compare(value.password, user.password)
         if (!valid) return res.status(403).json({
             error: "Email or password was invalid."
@@ -92,7 +93,7 @@ router.post("/register", auth.loggedOut, async (req, res) => { // Create the use
 
         new users({
             username: value.username,
-            email: value.password,
+            email: value.email,
             password: hash
         })
             .save()
