@@ -1,7 +1,7 @@
 require("dotenv").config({ quiet: true });
 
 const PORT = process.env.PORT || 3000;
-const MONGOOSE = process.env.MONGO_URI || "mongodb://localhost:27017"
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017"
 
 var express = require("express"),
     app = express(),
@@ -22,7 +22,9 @@ mongoose.connect(MONGO_URI)
 
 app.use(express.json({ limit: "1kb" }));
 app.use(compression());
-app.use(cookies())
+app.use(cookies());
+app.use(require("./middleware/auth").auth); // Authentication handler
+app.use("/auth", require("./routes/auth")); // Add auth routes to express
 
 app.use((req, res, next) => {
     if (!res.headersSent)
