@@ -19,14 +19,14 @@ export default function Home() {
     <>
       <div className="align-middle justify-center min-h-screen min-w-screen">
         <div className="max-w-2xl m-auto">
-          <h1 className="text-xl font-medium my-2">Home Page</h1>
+          {/* <h1 className="text-xl font-medium my-2">Home Page</h1> */}
           <InputBoxComponent
             placeholder={
-              auth.loading == true || auth.user == null
+              auth.loading == true || auth.user?.logged == false
                 ? "You need to login to post!"
                 : undefined
             }
-            disabled={auth.loading == true || auth.user == null}
+            disabled={auth.loading == true || auth.user?.logged == false}
             onAttachEvent={attachEventFunction}
             onSubmitEvent={submitEventFunction}
           />
