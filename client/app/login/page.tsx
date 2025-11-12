@@ -26,14 +26,10 @@ export default function LoginPage() {
   const handleSubmit = async () => {
     try {
       const axios = CreateAxios();
-      const request = await axios.post(
-        "/auth/login",
-        {
-          email,
-          password,
-        },
-        { validateStatus: () => true }
-      ); // I don't care what http status it is, just give me the error attribute in the json :)
+      const request = await axios.post("/auth/login", {
+        email,
+        password,
+      });
 
       const data = request.data;
       if (data.error) {

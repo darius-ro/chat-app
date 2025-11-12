@@ -25,11 +25,7 @@ export const AuthProvider = ({
   const CheckUserAuth = async () => {
     try {
       const axios = CreateAxios();
-      const request = await axios.get("/auth/", {
-        validateStatus(status) {
-          return true; // I don't want it to error out, preferably.
-        },
-      });
+      const request = await axios.get("/auth/");
 
       if (request.status == 200)
         setUser({

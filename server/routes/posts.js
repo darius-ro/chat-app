@@ -13,7 +13,16 @@ var express = require("express"),
 router.get("/", async (req, res) => {
   // User doesnt need to be authenticated to do this
   try {
-    const results = await posts.find().limit(20); // We will list about 20 by default, and hope they aren't really long
+    const query = req.query;
+    let page = 1;
+    if (query.page) {
+      page = Number(query.page);
+    }
+    const results = await posts
+      .find({}, { __v: 0, updatedAt: 0 }) // get any post, and remove __v from query
+      .sort({ createdAt: -1 }) // We will list about 20 by default, and hope they aren't really long
+      .skip((page - 1) * 20) // get any post from a specific page
+      .limit(20);
 
     if (results.length !== 0) {
       const ids = results.map((p) => p._id);

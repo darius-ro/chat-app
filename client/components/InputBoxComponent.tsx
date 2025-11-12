@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-type submitFunction = (text: string) => void;
+type submitFunction = (text: string) => Promise<boolean>;
 /**
  * There might be better ways to make thing component but,
  * in my opinion, i would be happy with this in any scenario
@@ -22,6 +22,13 @@ export default function InputBoxComponent({
     const { value } = e.target;
     setText(value ?? "");
   };
+  const submit = async () => {
+    const value = await onSubmitEvent(text);
+    if (value) {
+      setText(""); // to be fixed
+    } else {
+    }
+  };
   return (
     <div className="border-neutral-800 border rounded-2xl p-1">
       <textarea
@@ -29,6 +36,7 @@ export default function InputBoxComponent({
         className="text-left p-2 rounded-2xl w-full h-full min-h-32 focus:outline-none"
         disabled={disabled}
         onChange={handleChange}
+        value={text}
       />
       <div className="flex flex-row gap-x-1 mt-1 justify-end">
         <button
@@ -72,7 +80,7 @@ export default function InputBoxComponent({
                   : `hover:border-neutral-700 hover:bg-blue-700 cursor-pointer transition`
               }`}
           disabled={disabled}
-          onClick={() => onSubmitEvent(text)}
+          onClick={() => submit()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

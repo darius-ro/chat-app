@@ -1,14 +1,13 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function NavbarComponent() {
   const auth = useAuth();
   const linkClasses =
     "text-sm font-medium px-3 py-1 rounded hover:bg-white/10 transition text-white";
 
-  let logged = !auth.loading && Boolean(auth.user?.logged);
+  const logged = !auth.loading && Boolean(auth.user?.logged);
 
   return (
     <nav className="bg-neutral-950 fixed inset-x-0 top-0 z-40">
@@ -25,7 +24,7 @@ export default function NavbarComponent() {
             <div className="hidden sm:block">
               <input
                 aria-label="Search"
-                className="w-full bg-neutral-900 text-white placeholder:text-neutral-400 rounded-md px-3 py-2 text-sm"
+                className="w-full max-w-2xl bg-neutral-900 text-white placeholder:text-neutral-400 rounded-md px-3 py-2 text-sm"
                 placeholder="Search..."
               />
             </div>
