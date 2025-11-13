@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type submitFunction = (text: string) => Promise<boolean>;
 /**
@@ -17,24 +17,29 @@ export default function InputBoxComponent({
   onAttachEvent: VoidFunction;
 }>) {
   const [text, setText] = useState<string>("");
+  const [isDisabled, setIsDisabled] = useState<boolean>(disabled);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (disabled) return;
+    if (isDisabled) return;
     const { value } = e.target;
     setText(value ?? "");
   };
   const submit = async () => {
+    setIsDisabled(true);
     const value = await onSubmitEvent(text);
+    setIsDisabled(false);
     if (value) {
-      setText(""); // to be fixed
-    } else {
+      setText("");
     }
   };
+  useEffect(() => {
+    setIsDisabled(disabled);
+  }, [disabled]);
   return (
     <div className="border-neutral-800 border rounded-2xl p-1">
       <textarea
         placeholder={placeholder ?? "Type your thoughts"}
         className="text-left p-2 rounded-2xl w-full h-full min-h-32 focus:outline-none"
-        disabled={disabled}
+        disabled={isDisabled}
         onChange={handleChange}
         value={text}
       />
@@ -45,11 +50,11 @@ export default function InputBoxComponent({
              bg-neutral-600 
              text-white font-medium 
              ${
-               disabled
+               isDisabled
                  ? `cursor-not-allowed`
                  : `hover:border-neutral-700 hover:bg-neutral-700 cursor-pointer transition`
              }`}
-          disabled={disabled}
+          disabled={isDisabled}
           onClick={onAttachEvent}
         >
           <svg
@@ -75,11 +80,11 @@ export default function InputBoxComponent({
              bg-blue-600 
              text-white font-medium 
               ${
-                disabled
+                isDisabled
                   ? `cursor-not-allowed`
                   : `hover:border-neutral-700 hover:bg-blue-700 cursor-pointer transition`
               }`}
-          disabled={disabled}
+          disabled={isDisabled}
           onClick={() => submit()}
         >
           <svg

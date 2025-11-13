@@ -31,6 +31,7 @@ app.use(compression());
 app.use(require("./middleware/auth").auth); // Authentication handler
 app.use("/auth", require("./routes/auth")); // Add auth routes to express
 app.use("/posts", require("./routes/posts")); // Add posts routes to express
+app.use("/users", require("./routes/users"));
 app.use("/uploads", express.static("uploads"));
 
 app.use((req, res, next) => {

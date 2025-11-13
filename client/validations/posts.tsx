@@ -10,6 +10,9 @@ export const ValidatePost = joi
     createdAt: joi.string().optional(),
     updatedAt: joi.string().optional(),
   })
-  .strict(false);
+  .strict(false)
+  .options({
+    allowUnknown: true,
+  });
 
 export const ValidatePosts = joi.array().items(ValidatePost); // Posts - plural, array.

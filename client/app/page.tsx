@@ -16,10 +16,15 @@ export default function Home() {
       const post = await createPost(text);
       if (!post.error) {
         const newPost = post.post as PostType;
-        setActivePosts((posts) => [newPost, ...posts]); // need to fix this
+        setActivePosts((posts) => {
+          console.log("updating...");
+          return [newPost, ...posts];
+        }); // need to fix this
         return true;
       } else {
+        console.log("post error?");
         // some error handling
+        console.error(post.error);
         return false;
       }
     } catch (err) {
@@ -57,7 +62,7 @@ export default function Home() {
           />
           <div id="posts" className="mt-2 flex flex-col gap-y-2">
             {activePosts.map((post, i) => (
-              <PostComponent key={i} post={post} />
+              <PostComponent key={post._id} post={post} />
             ))}
           </div>
         </div>
