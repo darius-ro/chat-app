@@ -17,9 +17,8 @@ export default function Home() {
       if (!post.error) {
         const newPost = post.post as PostType;
         setActivePosts((posts) => {
-          console.log("updating...");
           return [newPost, ...posts];
-        }); // need to fix this
+        });
         return true;
       } else {
         console.log("post error?");
@@ -49,7 +48,6 @@ export default function Home() {
     <>
       <div className="align-middle justify-center min-h-screen min-w-screen">
         <div className="max-w-2xl m-auto">
-          {/* <h1 className="text-xl font-medium my-2">Home Page</h1> */}
           <InputBoxComponent
             placeholder={
               auth.loading == true || auth.user?.logged == false
