@@ -1,3 +1,4 @@
+"use client";
 import { GetUserResponse, UserType } from "@/@types/users";
 import Axios from "./axios";
 import { UserValidation } from "@/validations/users";

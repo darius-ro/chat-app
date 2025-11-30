@@ -18,6 +18,7 @@ export default function InputBoxComponent({
 }>) {
   const [text, setText] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState<boolean>(disabled);
+  const [error, setError] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (isDisabled) return;
     const { value } = e.target;
@@ -25,6 +26,12 @@ export default function InputBoxComponent({
   };
   const submit = async () => {
     setIsDisabled(true);
+    if (!text) {
+      // preferabbly tell the user the input is empty.
+      setIsDisabled(false);
+      setError(true);
+      return;
+    } else setError(false);
     const value = await onSubmitEvent(text);
     setIsDisabled(false);
     if (value) {
@@ -35,10 +42,14 @@ export default function InputBoxComponent({
     setIsDisabled(disabled);
   }, [disabled]);
   return (
-    <div className="border-neutral-800 border rounded-2xl p-1">
+    <div
+      className={`transition border rounded-2xl p-1 ${
+        error ? "border-red-600" : "border-neutral-800"
+      }`}
+    >
       <textarea
         placeholder={placeholder ?? "Type your thoughts"}
-        className="text-left p-2 rounded-2xl w-full h-full min-h-32 focus:outline-none"
+        className={`text-left p-2 rounded-2xl w-full h-full min-h-32 focus:outline-none`}
         disabled={isDisabled}
         onChange={handleChange}
         value={text}
